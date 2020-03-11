@@ -8,11 +8,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // 普通token
-    token: getToken().token,
+    // token: getToken() ? getToken().token : '',
     // token: '',
     // 长久token
-    refresh_token: getToken().refresh_token,
+    // refresh_token: getToken() ? getToken().refresh_token : '',
     // refresh_token: ''
+
+    token: getToken() && getToken().token,
+    refresh_token: getToken() && getToken().refresh_token
   },
   mutations: {
     // 给普通token赋值的方法

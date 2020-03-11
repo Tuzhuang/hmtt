@@ -63,6 +63,8 @@ export default {
           this.$store.commit("changeRefToken", res.data.refresh_token);
           // 不仅要在vuex中保村还要在localstorage中也保存一下
           setToken(res.data);
+          // 登录成功之后跳转到登录页面
+          this.$router.push("/home");
         } catch (error) {
           // 代码报错的时候应该弹出提示
           this.$toast.fail("用户名或验证码错误");
