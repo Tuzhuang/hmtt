@@ -67,6 +67,7 @@ export default {
           this.art_list.splice(i, 1);
           // 发送请求从服务器中删掉该文章
           await dislikes(this.art_id);
+          console.log(this.art_id);
           // 找到之后就break 退出循环
           break;
         }
@@ -79,7 +80,7 @@ export default {
     async reports(type) {
       // 循环数组找到当前要举报的文章，把他删掉
       for (let i = 0; i < this.art_list.length; i++) {
-        if (this.art_id.toString() === this.art_list[i].art_id.toString()) {
+        if (this.art_id === this.art_list[i].art_id) {
           // 删掉该文章
           this.art_list.splice(i, 1);
           // 就调用接口对文章进行举报

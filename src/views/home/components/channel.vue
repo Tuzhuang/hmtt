@@ -13,13 +13,7 @@
     <div class="channel-top">
       <div class="channel-box">
         <span>我的频道</span>
-        <van-button
-          @click="isDel = !isDel"
-          color="#f85a5a"
-          plain
-          round
-          size="mini"
-        >{{isDel?'完成':'编辑'}}</van-button>
+        <van-button @click="btnEdit" color="#f85a5a" plain round size="mini">{{isDel?'完成':'编辑'}}</van-button>
       </div>
       <!-- 标签 -->
       <div class="tagBox" v-for="(item, index) in chanList" :key="index">
@@ -64,6 +58,8 @@ import {
   editUserChannels,
   delUserChannels
 } from "@/api/channels.js";
+// 导入操作本地存储的方法
+import { setLocal } from "@/utilis/local";
 
 export default {
   // 父传子
@@ -108,16 +104,23 @@ export default {
       item.pre_time = Date.now();
       // 给我的频道的数据添加数据  添加之后因为使用的计算属性，他会自动更新执行一次，所以不用手动删除
       this.chanList.push(item);
-      // 创建一个数组 channels 等于我的频道的数据去掉 推荐 的数据通过map方法生成
-      let channels = this.chanList.slice(1).map((item, index) => {
-        let obj = {
-          id: item.id,
-          seq: index + 1
-        };
-        return obj;
-      });
-      // 发送请求修改用户频道列表的数据
-      editUserChannels({ channels });
+      // 发请求之前先做判断，如果用户登录了的话就发送请求
+      if (this.$store.state.token) {
+        // 创建一个数组 channels 等于我的频道的数据去掉 推荐 的数据通过map方法生成
+        let channels = this.chanList.slice(1).map((item, index) => {
+          let obj = {
+            id: item.id,
+            seq: index + 1
+          };
+          return obj;
+        });
+        // 发送请求修改用户频道列表的数据
+        editUserChannels({ channels });
+      } else {
+        // 如果没有登录的话就把当前选择的频道保存到本地存储
+        // 调用方法
+        setLocal("channels", JSON.stringify(this.chanList));
+      }
     },
     // 删除按钮的点击事件
     delTag(item) {
@@ -128,9 +131,26 @@ export default {
           this.chanList.splice(i, 1);
         }
       }
-      // 调用接口，发送请求修删除频道数据
-      delUserChannels({ channels: [item.id] });
-      // delUserChannels(item.id);
+      // 删除的调用接口也不能直接发送请求，如果用户登录的话就发送请求保存数据
+      if (this.$store.state.token) {
+        // 如果登录了就调用接口发送请求
+        // 调用接口，发送请求修删除频道数据
+        delUserChannels({ channels: [item.id] });
+        // delUserChannels(item.id);
+      } else {
+        // 如果没有登录的话就把删除后的数据保存到本地
+        // 调用方法
+        setLocal("channels", JSON.stringify(this.chanList));
+      }
+    },
+    // 编辑和完成的点击事件
+    btnEdit() {
+      // 给当前isDel赋值为取反
+      this.isDel = !this.isDel;
+      // 判断当前点击之后是完成的时候就隐藏弹出层
+      if (!this.isDel) {
+        this.show = false;
+      }
     }
   },
   // dom一加载就调用获取全部频道的方法

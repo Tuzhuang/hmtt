@@ -57,14 +57,20 @@ export default {
         // 如果验证成功的时候就发送请求
         try {
           let res = await login(this.form);
-          console.log(res);
+          // console.log(res);
           // 登录成功的时候给vuex中的token赋值
           this.$store.commit("changeToken", res.data.token);
           this.$store.commit("changeRefToken", res.data.refresh_token);
           // 不仅要在vuex中保村还要在localstorage中也保存一下
           setToken(res.data);
-          // 登录成功之后跳转到登录页面
-          this.$router.push("/home");
+          // 登录成功的时候判断一下当前的路径来进行跳转
+          if (this.$route.path == "/login") {
+            // 登录成功之后跳转到登录页面
+            this.$router.push("/home");
+          } else {
+            // 否则就从哪来回哪去  登录成功跳转路径的时候应该是从哪来就回哪去
+            this.$router.back();
+          }
         } catch (error) {
           // 代码报错的时候应该弹出提示
           this.$toast.fail("用户名或验证码错误");

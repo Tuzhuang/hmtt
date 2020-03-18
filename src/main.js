@@ -32,7 +32,16 @@ Vue.filter('filterTime', function (val) {
 // 注册使用
 Vue.use(Vant);
 
+// 导入判断用户是否登录的插件
+import myPlugin from '@/utilis/myPlugin';
+
+// 注册使用
+Vue.use(myPlugin)
+
 Vue.config.productionTip = false
+
+
+
 
 new Vue({
   router,

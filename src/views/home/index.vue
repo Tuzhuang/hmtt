@@ -4,9 +4,15 @@
       <!-- 左侧图标 -->
       <van-icon @click="btnShow" class="top-icon" name="wap-nav" />
       <!-- 输入框 -->
-      <van-search class="top-search" shape="round" background="#3194ff" placeholder="请输入搜索关键词" />
+      <van-search
+        @focus="$router.push('/search')"
+        class="top-search"
+        shape="round"
+        background="#3194ff"
+        placeholder="请输入搜索关键词"
+      />
       <!-- 右侧图标 -->
-      <van-icon class="top-icon" name="search" />
+      <van-icon @click="$router.push('/search')" class="top-icon" name="search" />
     </div>
     <!-- 频道部分  标签页 -->
     <van-tabs v-model="active">
@@ -78,6 +84,8 @@ import { getArtiList } from "@/api/articles.js";
 // 导入封装后的弹出层组件
 import channel from "./components/channel.vue";
 import more from "./components/more.vue";
+// 导入获取本地数据的方法
+import { getLocal } from "@/utilis/local";
 
 export default {
   name: "home",
@@ -140,25 +148,56 @@ export default {
     },
     // 获取用户频道列表的方法
     async getChanData() {
-      // 调用接口
-      let res = await getChanList();
-      // console.log(res);
-      // 给用户频道列表的数据赋值
-      this.chanDataList = res.data.channels;
-      // 给每个单独的频道添加单独属于自己的属性
-      this.chanDataList.forEach(item => {
-        // 因为下面的这些属性在data中没有被定义，所以，修改的时候页面上不会进行实时修改，所以要用$set来修改
-        // 用来控制列表的刷新状态的，为false会调用onload事件，为true就不会调用
-        this.$set(item, "loading", false);
-        // 列表页是否加载到底部了，true代表是，false代表没到底
-        this.$set(item, "finished", false);
-        // 新闻列表页的数据源
-        this.$set(item, "articList", []);
-        // 用来控制上拉刷新的状态，为false代表不刷新了，为true代表正在刷新
-        this.$set(item, "isLoading", false);
-        // 第一次的事件戳要设置为当前的时间戳  因为不用在页面中显示，所以直接设置就可以了
-        item.pre_time = Date.now();
-      });
+      // 获取用户频道的时候也要做判断，判断当前用户与没有登录，因为虽然频道存储了，但是一刷新就没了，所以要从本地存储里面取
+      if (this.$store.state.token) {
+        // 调用接口
+        let res = await getChanList();
+        // console.log(res);
+        // 给用户频道列表的数据赋值
+        this.chanDataList = res.data.channels;
+        // 给每个单独的频道添加单独属于自己的属性
+        this.chanDataList.forEach(item => {
+          // 因为下面的这些属性在data中没有被定义，所以，修改的时候页面上不会进行实时修改，所以要用$set来修改
+          // 用来控制列表的刷新状态的，为false会调用onload事件，为true就不会调用
+          this.$set(item, "loading", false);
+          // 列表页是否加载到底部了，true代表是，false代表没到底
+          this.$set(item, "finished", false);
+          // 新闻列表页的数据源
+          this.$set(item, "articList", []);
+          // 用来控制上拉刷新的状态，为false代表不刷新了，为true代表正在刷新
+          this.$set(item, "isLoading", false);
+          // 第一次的事件戳要设置为当前的时间戳  因为不用在页面中显示，所以直接设置就可以了
+          item.pre_time = Date.now();
+        });
+      } else {
+        // 如果没有登录的话，就从本地存储里面取
+        // 先把本地存储的值取出来
+        let localChannels = getLocal("channels");
+        // 判断当前取到的是否有值，如果有的话就赋值给用户频道列表
+        if (localChannels) {
+          // 把取到的值赋值给用户频道列表
+          this.chanDataList = localChannels;
+        } else {
+          // 如果没值的话，就说明是第一次没登录也没有保存数据，那就请求接口返回服务器默认的频道列表给用户
+          localChannels = await getChanList();
+          // 也要给第一次获取的频道列表加属性
+          this.chanDataList = localChannels.data.channels;
+          // 给每个单独的频道添加单独属于自己的属性
+          this.chanDataList.forEach(item => {
+            // 因为下面的这些属性在data中没有被定义，所以，修改的时候页面上不会进行实时修改，所以要用$set来修改
+            // 用来控制列表的刷新状态的，为false会调用onload事件，为true就不会调用
+            this.$set(item, "loading", false);
+            // 列表页是否加载到底部了，true代表是，false代表没到底
+            this.$set(item, "finished", false);
+            // 新闻列表页的数据源
+            this.$set(item, "articList", []);
+            // 用来控制上拉刷新的状态，为false代表不刷新了，为true代表正在刷新
+            this.$set(item, "isLoading", false);
+            // 第一次的事件戳要设置为当前的时间戳  因为不用在页面中显示，所以直接设置就可以了
+            item.pre_time = Date.now();
+          });
+        }
+      }
     },
     // 菜单栏的点击事件
     btnShow() {

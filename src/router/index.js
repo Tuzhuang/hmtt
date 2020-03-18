@@ -7,12 +7,19 @@ import home from '@/views/home/'
 import faqs from '@/views/faqs/'
 import video from '@/views/video/'
 import mine from '@/views/mine/'
+import search from '@/views/search/'
+import searchResult from '@/views/searchResult/'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/login',
+    component: login
+  },
+  {
+    // 给login组件再加一个跳转的路由，但是进入的组件还是login
+    path: '/checklogin',
     component: login
   },
   {
@@ -36,6 +43,20 @@ const routes = [
         component: mine
       }
     ]
+  },
+  {
+    path: '/search',  // 搜索页面
+    component: search
+  },
+  {
+    // 动态路由匹配
+    path: '/searchResult/:key',  // 搜索页面
+    component: searchResult
+  },
+  {
+    // 路由重定向
+    path: '*',  // 
+    redirect: '/login'
   }
 
 ]
