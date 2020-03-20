@@ -84,15 +84,15 @@ export default {
         per_page: this.pagesize,
         q: this.$route.params.key
       });
-      // console.log(res);
+      console.log(res);
       // 请求完数据让当前页加一
       this.page += 1;
       // 判断当前是否还有数据，如果还有数据的话就继续请求
       // 先得到总共有多少页
       let totalPage = Math.ceil(res.data.total_count / this.pagesize);
       if (totalPage > this.page) {
-        // 代表还有数据，就把loading设置为true，代表可以继续请求新的数据
-        this.loading = true;
+        // 代表还有数据，就把loading设置为false，代表可以继续请求新的数据
+        this.loading = false;
         // 给列表的数据源赋值
         this.list.push(...res.data.results);
       } else {
@@ -104,8 +104,8 @@ export default {
     btnComment(art_id) {
       // 判断当前用户有没有登录，如果没有登录的话就打回登录页
       if (this.checkLogin()) {
-        console.log("登录了");
-        console.log(art_id);
+        // 登录成功的话就跳转到文章详情页面并携带文章id
+        this.$router.push(`/detail/${art_id}`);
       }
     }
   }

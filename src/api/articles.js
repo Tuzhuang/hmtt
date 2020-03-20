@@ -47,3 +47,75 @@ export function blacklists(data) {
         }
     })
 }
+
+
+// 封装获取文章详情的接口
+export function getArticlesInfo(params) {
+    return request({
+        method: 'get',
+        url: `/articles/${params}`
+    })
+}
+
+
+// 封装点赞文章的接口
+export function artLikings(data) {
+    return request({
+        method: 'post',
+        url: `/article/likings`,
+        data: {
+            target: data
+        }
+    })
+}
+
+
+// 封装取消对文章点赞的接口
+export function artDislikes(data) {
+    return request({
+        method: 'delete',
+        url: `/article/dislikes/${data}`
+    })
+}
+
+
+// 封装对文章不喜欢的接口
+export function articleDisLikes(data) {
+    return request({
+        method: 'post',
+        url: '/article/dislikes',
+        data: {
+            target: data
+        }
+    })
+}
+
+
+// 封装对文章取消不喜欢的接口
+export function articleLikes(data) {
+    return request({
+        method: 'delete',
+        url: `/article/dislikes/${data}`
+    })
+}
+
+
+// 封装收藏文章的接口
+export function articleCollections(data) {
+    return request({
+        method: 'post',
+        url: '/article/collections',
+        data: {
+            target:data
+        }
+    })
+}
+
+
+// 封装取消收藏文章的接口
+export function articleDisCollections(data) {
+    return request({
+        method: 'delete',
+        url: `/article/collections/${data}`
+    })
+}

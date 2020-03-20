@@ -31,7 +31,7 @@
             finished-text="没有更多了"
             @load="onLoad(item)"
           >
-            <van-cell v-for="(item1,index1) in item.articList" :key="index1" :title="item1.title">
+            <van-cell @click="$router.push(`/detail/${item1.art_id}`)" v-for="(item1,index1) in item.articList" :key="index1" :title="item1.title">
               <template slot="title">
                 <!-- 标题部分 -->
                 <div class="title">

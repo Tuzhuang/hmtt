@@ -40,7 +40,7 @@ export default {
       },
       // 输入框的验证
       form: {
-        mobile: "18511111111",
+        mobile: "18511116485",
         code: "246810"
       },
       //   是否执行动画的bool值

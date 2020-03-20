@@ -16,8 +16,14 @@ let request = axios.create({
     // `transformResponse` 在传递给 then/catch 前，允许修改响应数据
     transformResponse: [function (data) {
         // 对 data 进行任意转换处理
-        // 对数据进行截取
-        return jsonBig.parse(data);
+        // 这里不能直接都转化成json格式的，因为有可能data的响应体是空字符串，那么转成json格式的话就会报错，建议用 try catch 包起来
+        try {
+            // 对数据进行截取
+            return jsonBig.parse(data);
+        }catch{
+            // 如果前面报错的话就代表是空字符串，那么久直接返回data
+            return data;
+        }
     }],
 
 })

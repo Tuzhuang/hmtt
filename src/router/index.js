@@ -9,6 +9,7 @@ import video from '@/views/video/'
 import mine from '@/views/mine/'
 import search from '@/views/search/'
 import searchResult from '@/views/searchResult/'
+import detail from '@/views/detail/'
 
 Vue.use(VueRouter)
 
@@ -50,8 +51,13 @@ const routes = [
   },
   {
     // 动态路由匹配
-    path: '/searchResult/:key',  // 搜索页面
+    path: '/searchResult/:key',  // 搜索结果页面
     component: searchResult
+  },
+  {
+    // 动态路由匹配
+    path: '/detail/:key',  // 文章详情页面
+    component: detail
   },
   {
     // 路由重定向

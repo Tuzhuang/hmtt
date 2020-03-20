@@ -10,8 +10,10 @@ export default {};
 <style>
 html,
 body {
-  width: 100%;
+  max-width: 100%;
   height: 100%;
   background-color: #f5f7f9;
+  /* 禁止页面左右拖动 */
+  overflow-x: hidden;
 }
 </style>
