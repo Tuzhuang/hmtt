@@ -1,15 +1,30 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 导入子组件
-import login from '@/views/login/'  // 后面加一个 / 代表找到login页面下的index.js 或者 index.vue
-import layout from '@/views/layout/'
-import home from '@/views/home/'
-import faqs from '@/views/faqs/'
-import video from '@/views/video/'
-import mine from '@/views/mine/'
-import search from '@/views/search/'
-import searchResult from '@/views/searchResult/'
-import detail from '@/views/detail/'
+// import login from '@/views/login/'  // 后面加一个 / 代表找到login页面下的index.js 或者 index.vue
+// import layout from '@/views/layout/'
+// import home from '@/views/home/'
+// import faqs from '@/views/faqs/'
+// import video from '@/views/video/'
+// import mine from '@/views/mine/'
+// import search from '@/views/search/'
+// import searchResult from '@/views/searchResult/'
+// import detail from '@/views/detail/'
+// import profile from '@/views/profile/'
+// import robot from '@/views/robot/'
+
+// 异步导入  路由懒加载
+const login = () => import('@/views/login/')  // 后面加一个 / 代表找到login页面下的index.js 或者 index.vue
+const layout = () => import('@/views/layout/')
+const home = () => import('@/views/home/')
+const faqs = () => import('@/views/faqs/')
+const video = () => import('@/views/video/')
+const mine = () => import('@/views/mine/')
+const search = () => import('@/views/search/')
+const searchResult = () => import('@/views/searchResult/')
+const detail = () => import('@/views/detail/')
+const profile = () => import('@/views/profile/')
+const robot = () => import('@/views/robot/')
 
 Vue.use(VueRouter)
 
@@ -60,9 +75,18 @@ const routes = [
     component: detail
   },
   {
+    path: '/profile',  // 个人信息修改页面
+    component: profile
+  },
+  {
+    name: 'robot',
+    path: '/robot',  // 小智机器人页面
+    component: robot
+  },
+  {
     // 路由重定向
     path: '*',  // 
-    redirect: '/login'
+    redirect: '/home'
   }
 
 ]

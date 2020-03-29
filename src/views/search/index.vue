@@ -58,7 +58,7 @@
     </div>
   </div>
 </template>
-
+ 
 <script>
 // 导入搜索联想的接口
 import { suggestion } from "@/api/search";
@@ -84,12 +84,46 @@ export default {
   },
   methods: {
     // 搜索框搜索内容时就触发的事件
+    // 防抖封装的方法
+    // myFd: fangdou(async function() {
+    //   // 发送请求之前 判断当前输入框的值不为空的时候再发请求
+    //   if (window.that.txtVal === "") {
+    //     // 就把搜索联想的数组清空
+    //     window.that.suggesList = [];
+    //   } else {
+    //     // 发送请求获取搜索联想的词语
+    //     let res = await suggestion({
+    //       q: window.that.txtVal
+    //     });
+    //     console.log("res");
+    //     // 给搜索联想的数据源赋值
+    //     window.that.suggesList = res.data.options;
+    //     // 给当前输入的关键词高亮显示
+    //     window.that.suggesList = window.that.suggesList.map(item => {
+    //       // 先统一转成小写再做替换
+    //       // 不直接return 要审查各行一个对象，把修改之前的字符串和修改之后的字符串都保存起来
+    //       let str = item
+    //         .toLowerCase()
+    //         .replace(
+    //           window.that.txtVal.toLowerCase(),
+    //           `<span style="color:red;font-weight: bold;"> ${window.that.txtVal} </span>`
+    //         );
+
+    //       // 返回一个对象
+    //       return {
+    //         oldItem: item,
+    //         newItem: str
+    //       };
+    //     });
+    //   }
+    // },200),
+
+    // 没有封装的防抖的方法
     search() {
       // 先清除掉上一次的计时器
       clearTimeout(this.timerID);
-      // 防止每次只要一输入就触发请求，所以要解决防抖
+      // 然后把每次触发的逻辑放到计时器里面
       this.timerID = setTimeout(async () => {
-        // fangdou(async () => {
         // 发送请求之前 判断当前输入框的值不为空的时候再发请求
         if (this.txtVal === "") {
           // 就把搜索联想的数组清空
@@ -120,8 +154,7 @@ export default {
             };
           });
         }
-        // }, 200);
-      }, 300);
+      }, 200);
     },
     // 输入框的回车事件
     searchDown(txtVal) {
@@ -151,6 +184,10 @@ export default {
       setLocal("historyData", JSON.stringify(this.historyData));
     }
   }
+  // created() {
+  // 把this的指向赋值给window.that
+  //   window.that = this;
+  // }
 };
 </script>
 

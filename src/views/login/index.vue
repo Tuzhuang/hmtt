@@ -3,16 +3,16 @@
     <!-- 导航栏 -->
     <van-nav-bar title="登录" />
     <!-- 输入框 -->
-    <van-field v-model="form.mobile" placeholder="请输入手机号" :error-message="valid.mobile">
+    <van-field v-model="form.mobile" type="tel" placeholder="请输入手机号" :error-message="valid.mobile">
       <template slot="left-icon">
         <i class="iconfont icon-mobile"></i>
       </template>
     </van-field>
-    <van-field v-model="form.code" placeholder="请输入验证码" :error-message="valid.code">
+    <van-field v-model="form.code" type="digit" placeholder="请输入验证码" :error-message="valid.code">
       <template slot="left-icon">
         <i class="iconfont icon-lock"></i>
       </template>
-      <van-button slot="button" size="small" round>发送验证码</van-button>
+      <van-button @click="$toast('此账号为测试账号，暂未开放验证码功能')" slot="button" size="small" round>发送验证码</van-button>
     </van-field>
     <!-- 按钮 -->
     <van-button

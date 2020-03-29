@@ -40,6 +40,9 @@ Vue.use(myPlugin)
 
 Vue.config.productionTip = false
 
+// 导入适配的文件
+import 'amfe-flexible/index.js'
+
 
 
 

@@ -14,17 +14,19 @@
       <!-- 图标 -->
       <!-- 评论 -->
       <van-icon @click="addComment" class="write-icon" :info="totalComm" name="comment-o" />
-      <!-- 收藏 -->
-      <van-icon
-        v-if="selfCollect"
-        @click="callecFalse"
-        class="write-icon"
-        color="gold"
-        name="star"
-      />
-      <van-icon v-else @click="callecTrue" class="write-icon" name="star-o" />
-      <!-- 转发 -->
-      <van-icon @click="$toast('该功能尚未开发，请尽情期待...')" class="write-icon" name="share" />
+      <div v-if="!isRaply">
+        <!-- 收藏 -->
+        <van-icon
+          v-if="selfCollect"
+          @click="callecFalse"
+          class="write-icon"
+          color="gold"
+          name="star"
+        />
+        <van-icon v-else @click="callecTrue" class="write-icon" name="star-o" />
+        <!-- 转发 -->
+        <van-icon @click="$toast('该功能尚未开发，请尽情期待...')" class="write-icon" name="share" />
+      </div>
     </div>
   </div>
 </template>
